@@ -79,11 +79,9 @@ BensNavBar.handleClick = function functionName(element) {
 document.addEventListener('touchstart', BensNavBar.handleTouchStart, false);
 document.addEventListener('touchmove', BensNavBar.handleTouchMove, false);
 document.addEventListener('touchend', BensNavBar.handleTouchEnd, false);
-document.addEventListener('click', function (evt) {
-  if (BensNavBar.touch) {
+document.getElementById('menubutton').addEventListener('click', function (evt) {
     evt.stopPropagation();
     evt.preventDefault();
-  }
-}, false);
+  }, false);
 
 }(this));
