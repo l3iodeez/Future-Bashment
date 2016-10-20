@@ -66,7 +66,6 @@ BensNavBar.handleTouchMove = function handleTouchMove(evt) {
 };
 
 BensNavBar.handleTouchEnd = function (evt) {
-      BensNavBar.touch = false;
       BensNavBar.removeClass(document.getElementById('menubutton'), 'touch');
       if (typeof BensNavBar.currentHoverElement !== 'undefined') {
         BensNavBar.removeClass(BensNavBar.currentHoverElement, 'touch');
@@ -85,6 +84,7 @@ document.addEventListener('touchmove', BensNavBar.handleTouchMove, false);
 document.addEventListener('touchend', BensNavBar.handleTouchEnd, false);
 window.onload = function () {
   document.getElementById('menubutton').addEventListener('click', function (evt) {
+    console.log('click fired');
     evt.stopPropagation();
     evt.preventDefault();
   }, false);
