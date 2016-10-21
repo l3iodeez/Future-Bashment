@@ -43,15 +43,31 @@ BensNavBar.hoverOn = function (element) {
   }
 };
 
+BensNavBar.showMenu = function () {
+  var menuButton = document.getElementById('menubutton');
+  BensNavBar.addClass(menuButton, 'touch');
+  BensNavBar.addClass(document.getElementById('drophover'), 'show');
+};
+
+BensNavBar.hideMenu = function (hoverElement) {
+  BensNavBar.removeClass(document.getElementById('menubutton'), 'touch');
+  if (typeof hoverElement !== 'undefined') {
+    BensNavBar.removeClass(hoverElement, 'touch');
+    window.open(hoverElement.href, '_blank');
+  }
+
+  BensNavBar.removeClass(document.getElementById('drophover'), 'show');
+};
+
 BensNavBar.handleTouchStart = function (evt) {
   evt.stopPropagation();
   evt.preventDefault();
+  document.getElementsByClassName('dropdown')[0].style.cursor = 'none';
   BensNavBar.touch = true;
   var menuButton = document.getElementById('menubutton');
-  var hoverElement = document.elementFromPoint(evt.touches[0].clientX, evt.touches[0].clientY);
+  var hoverElement = document.elementFromPoint(evt.clientX || evt.touches[0].clientX, evt.clientY || evt.touches[0].clientY);
   if (['menubutton', 'menuimage'].includes(hoverElement.className)) {
-    BensNavBar.addClass(menuButton, 'touch');
-    BensNavBar.addClass(document.getElementById('drophover'), 'show');
+    BensNavBar.showMenu();
   } else if (['emaillist'].includes(hoverElement.className)) {
     window.open(BensNavBar.mailingListLink, '_blank');
   }
@@ -61,33 +77,20 @@ BensNavBar.handleTouchMove = function handleTouchMove(evt) {
   console.log('touchmove fired');
   evt.stopPropagation();
   evt.preventDefault();
-  var hoverElement = document.elementFromPoint(evt.touches[0].clientX, evt.touches[0].clientY);
+  var hoverElement = document.elementFromPoint(evt.clientX || evt.touches[0].clientX, evt.clientY || evt.touches[0].clientY);
   BensNavBar.hoverOn(hoverElement);
 };
 
 BensNavBar.handleTouchEnd = function (evt) {
-      BensNavBar.removeClass(document.getElementById('menubutton'), 'touch');
-      if (typeof BensNavBar.currentHoverElement !== 'undefined') {
-        BensNavBar.removeClass(BensNavBar.currentHoverElement, 'touch');
-        window.open(BensNavBar.currentHoverElement.href, '_blank');
-      }
-
-      BensNavBar.removeClass(document.getElementById('drophover'), 'show');
-    };
-
-BensNavBar.handleClick = function functionName(element) {
-  window.open(element.href);
+  document.getElementsByClassName('dropdown')[0].style.cursor = 'auto';
+  BensNavBar.hideMenu(BensNavBar.currentHoverElement);
 };
 
 document.addEventListener('touchstart', BensNavBar.handleTouchStart, false);
 document.addEventListener('touchmove', BensNavBar.handleTouchMove, false);
 document.addEventListener('touchend', BensNavBar.handleTouchEnd, false);
-window.onload = function () {
-  document.getElementById('menubutton').addEventListener('click', function (evt) {
-    console.log('click fired');
-    evt.stopPropagation();
-    evt.preventDefault();
-  }, false);
-};
+document.addEventListener('mousedown', BensNavBar.handleTouchStart, false);
+document.addEventListener('mousemove', BensNavBar.handleTouchMove, false);
+document.addEventListener('mouseup', BensNavBar.handleTouchEnd, false);
 
 }(this));
